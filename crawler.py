@@ -1,4 +1,5 @@
 import argparse
+import time
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -29,6 +30,9 @@ class Crawler:
         snippets = []
         self.driver.get(searching_url)
         soup = BeautifulSoup(self.driver.page_source, 'lxml')
+        print(soup)
+        if "CAPTCHA" in soup:
+            print("CAPTCHA!!!!!!")
         raw_data = soup.find_all("div", {"class": "VwiC3b yXK7lf MUxGbd yDYNvb lyLwlc"})
         for i in raw_data:
             time = i.find("span", {"class": "MUxGbd wuQ4Ob WZ8Tjf"})
@@ -82,6 +86,7 @@ class Crawler:
             for sentence in goal_sentences:
                 if sentence not in results:
                     results.append(sentence)
+            time.sleep(30)
         self.save_csv_file(results)
 
 
